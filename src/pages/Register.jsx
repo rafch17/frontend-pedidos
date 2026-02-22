@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+import { useAuth } from '../context/AuthContext';
 import { REGISTER_MUTATION, REGISTER_ADMIN_MUTATION } from '../graphql/mutations';
 import './Auth.css';
 
 const Register = () => {
+  const { isAdmin: currentUserIsAdmin } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -13,7 +15,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const navigate = useNavigate();
   const [registerMutation] = useMutation(REGISTER_MUTATION);
   const [registerAdminMutation] = useMutation(REGISTER_ADMIN_MUTATION);
@@ -22,7 +24,7 @@ const Register = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    
+
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden');
       return;
@@ -50,7 +52,7 @@ const Register = () => {
           variables: { username, password },
         });
       }
-      
+
       setSuccess('¡Registro exitoso! Ahora puedes iniciar sesión.');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
@@ -100,17 +102,19 @@ const Register = () => {
               placeholder="Confirma tu contraseña"
             />
           </div>
-          <div className="form-group checkbox-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={isAdmin}
-                onChange={(e) => setIsAdmin(e.target.checked)}
-              />
-              Registrar como Administrador
-            </label>
-          </div>
-          {isAdmin && (
+          {currentUserIsAdmin && (
+            <div className="form-group checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={isAdmin}
+                  onChange={(e) => setIsAdmin(e.target.checked)}
+                />
+                Registrar como Administrador
+              </label>
+            </div>
+          )}
+          {isAdmin && currentUserIsAdmin && (
             <div className="form-group">
               <label htmlFor="adminToken">Token de Administrador</label>
               <input
@@ -126,9 +130,12 @@ const Register = () => {
             {loading ? 'Registrando...' : 'Registrarse'}
           </button>
         </form>
-        <p className="auth-link">
-          ¿Ya tienes cuenta? <Link to="/login">Inicia Sesión</Link>
-        </p>
+        {!isAdmin && !currentUserIsAdmin && (
+          <p className="auth-link">
+            ¿Ya tienes cuenta? <Link to="/login">Inicia Sesión</Link>
+          </p>
+        )}
+
       </div>
     </div>
   );

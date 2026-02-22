@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from '../graphql/mutations';
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [logoutMutation] = useMutation(LOGOUT_MUTATION);
 
@@ -27,7 +27,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <Link to="/">Pedidos Rafch</Link>
+        <Link to="/">PedidosRafch</Link>
       </div>
       <ul className="navbar-menu">
         {user ? (
@@ -37,6 +37,9 @@ const Navbar = () => {
             </li>
             <li>
               <Link to="/orders">Mis Pedidos</Link>
+            </li>
+            <li>
+              <Link to="/register">Registrar Usuarios</Link>
             </li>
             {user.role === 'ADMIN' && (
               <li>

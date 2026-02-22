@@ -14,8 +14,8 @@ const Home = () => {
   return (
     <div className="home-page">
       <div className="hero">
-        <h1>Bienvenido a Pedidos Rafch</h1>
-        <p>Una API GraphQL con autenticación JWT</p>
+        <h1>Bienvenido a PedidosRafch</h1>
+        <p>Una aplicación de gestión de pedidos con GraphQL</p>
         
         {user ? (
           <div className="user-info">

@@ -1,0 +1,51 @@
+# Frontend
+
+Frontend de aplicación web con autenticación JWT y gestión de productos y pedidos, construido con React y GraphQL.
+
+## Demo
+
+**Deploy en Render:** https://authapi-frontend.onrender.com
+
+## Tecnologías
+
+- React 18
+- Vite
+- React Router DOM
+- Apollo Client
+- GraphQL
+
+## Instalación
+
+```
+bash
+npm install
+npm run dev
+```
+
+## Estructura del Proyecto
+
+```
+src/
+├── apollo/client.js
+├── components/Navbar.jsx, ProtectedRoute.jsx
+├── context/AuthContext.jsx
+├── graphql/queries.js, mutations.js
+├── pages/Login.jsx, Register.jsx, Products.jsx, Orders.jsx, AdminDashboard.jsx
+├── App.jsx
+├── main.jsx
+└── index.css
+```
+
+## Roles de Usuario
+
+- USER: Login, crear pedidos, ver sus pedidos
+- ADMIN: Todas las anteriores + CRUD productos, ver todos los pedidos, cambiar estados
+
+## Características
+
+- Autenticación JWT
+- Protección de rutas por rol
+- Gestión de productos
+- Sistema de pedidos
+- Panel de administración
+</parameter>

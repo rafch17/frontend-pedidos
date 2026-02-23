@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -22,16 +22,16 @@ const Home = () => {
             <p>Hola, <strong>{user.username}</strong>!</p>
             <p>Tu rol es: <strong>{user.role}</strong></p>
             <div className="quick-links">
-              <a href="/products" className="btn-primary">Ver Productos</a>
-              <a href="/orders" className="btn-secondary">Mis Pedidos</a>
+              <Link href="/products" className="btn-primary">Ver Productos</Link>
+              <Link href="/orders" className="btn-secondary">Mis Pedidos</Link>
             </div>
           </div>
         ) : (
           <div className="guest-info">
             <p>Por favor, inicia sesión o regístrate para continuar</p>
             <div className="quick-links">
-              <a href="/login" className="btn-primary">Iniciar Sesión</a>
-              <a href="/register" className="btn-secondary">Registrarse</a>
+              <Link href="/login" className="btn-primary">Iniciar Sesión</Link>
+              <Link href="/register" className="btn-secondary">Registrarse</Link>
             </div>
           </div>
         )}

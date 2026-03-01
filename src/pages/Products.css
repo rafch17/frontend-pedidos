@@ -83,6 +83,97 @@
   background: #c0392b;
 }
 
+/* Edit Form Styles */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-form .form-group {
+  margin-bottom: 0;
+}
+
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-actions .btn-primary,
+.edit-actions .btn-secondary {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.edit-actions .btn-primary {
+  background: #4a90d9;
+  color: white;
+}
+
+.edit-actions .btn-primary:hover:not(:disabled) {
+  background: #357abd;
+}
+
+.edit-actions .btn-primary:disabled {
+  background: #a0c4e8;
+  cursor: not-allowed;
+}
+
+.edit-actions .btn-secondary {
+  background: #95a5a6;
+  color: white;
+}
+
+.edit-actions .btn-secondary:hover:not(:disabled) {
+  background: #7f8c8d;
+}
+
+/* Admin Actions */
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-actions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.btn-edit {
+  background: #f39c12;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #d68910;
+}
+
 .empty-state {
   text-align: center;
   padding: 60px 20px;

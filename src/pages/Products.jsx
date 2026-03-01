@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_PRODUCTS } from '../graphql/queries';
-import { CREATE_PRODUCT_MUTATION, DELETE_PRODUCT_MUTATION } from '../graphql/mutations';
+import { CREATE_PRODUCT_MUTATION, DELETE_PRODUCT_MUTATION, UPDATE_PRODUCT_MUTATION } from '../graphql/mutations';
 import { useAuth } from '../context/AuthContext';
 import './Products.css';
 
@@ -13,8 +13,14 @@ const Products = () => {
   const [newProduct, setNewProduct] = useState({ name: '', description: '', price: '' });
   const [formError, setFormError] = useState('');
   
+  // Estado para edición de productos
+  const [editingProductId, setEditingProductId] = useState(null);
+  const [editFormData, setEditFormData] = useState({ name: '', description: '', price: '' });
+  const [editError, setEditError] = useState('');
+  
   const [createProduct, { loading: creating }] = useMutation(CREATE_PRODUCT_MUTATION);
   const [deleteProduct] = useMutation(DELETE_PRODUCT_MUTATION);
+  const [updateProduct, { loading: updating }] = useMutation(UPDATE_PRODUCT_MUTATION);
 
   const handleCreateProduct = async (e) => {
     e.preventDefault();
@@ -46,6 +52,44 @@ const Products = () => {
       refetch();
     } catch (err) {
       alert(err.message || 'Error al eliminar producto');
+    }
+  };
+
+  const handleEditClick = (product) => {
+    setEditingProductId(product.id);
+    setEditFormData({
+      name: product.name,
+      description: product.description || '',
+      price: product.price?.toString() || ''
+    });
+    setEditError('');
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProductId(null);
+    setEditFormData({ name: '', description: '', price: '' });
+    setEditError('');
+  };
+
+  const handleUpdateProduct = async (id) => {
+    setEditError('');
+    
+    try {
+      await updateProduct({
+        variables: {
+          id,
+          input: {
+            name: editFormData.name,
+            description: editFormData.description || null,
+            price: parseFloat(editFormData.price),
+          },
+        },
+      });
+      setEditingProductId(null);
+      setEditFormData({ name: '', description: '', price: '' });
+      refetch();
+    } catch (err) {
+      setEditError(err.message || 'Error al actualizar producto');
     }
   };
 
@@ -110,16 +154,76 @@ const Products = () => {
       <div className="products-grid">
         {data?.products?.map((product) => (
           <div key={product.id} className="product-card">
-            <h3>{product.name}</h3>
-            <p className="product-description">{product.description || 'Sin descripción'}</p>
-            <p className="product-price">${product.price?.toFixed(2)}</p>
-            {isAdmin && (
-              <button 
-                className="btn-delete"
-                onClick={() => handleDeleteProduct(product.id)}
-              >
-                Eliminar
-              </button>
+            {editingProductId === product.id ? (
+              // Modo edición
+              <div className="edit-form">
+                {editError && <div className="error-message">{editError}</div>}
+                <div className="form-group">
+                  <label>Nombre</label>
+                  <input
+                    type="text"
+                    value={editFormData.name}
+                    onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Descripción</label>
+                  <textarea
+                    value={editFormData.description}
+                    onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Precio</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={editFormData.price}
+                    onChange={(e) => setEditFormData({ ...editFormData, price: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="edit-actions">
+                  <button 
+                    className="btn-primary"
+                    onClick={() => handleUpdateProduct(product.id)}
+                    disabled={updating}
+                  >
+                    {updating ? 'Guardando...' : 'Guardar'}
+                  </button>
+                  <button 
+                    className="btn-secondary"
+                    onClick={handleCancelEdit}
+                    disabled={updating}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              // Modo visualización
+              <>
+                <h3>{product.name}</h3>
+                <p className="product-description">{product.description || 'Sin descripción'}</p>
+                <p className="product-price">${product.price?.toFixed(2)}</p>
+                {isAdmin && (
+                  <div className="admin-actions">
+                    <button 
+                      className="btn-edit"
+                      onClick={() => handleEditClick(product)}
+                    >
+                      Editar
+                    </button>
+                    <button 
+                      className="btn-delete"
+                      onClick={() => handleDeleteProduct(product.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         ))}

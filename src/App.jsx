@@ -22,16 +22,16 @@ const Home = () => {
             <p>Hola, <strong>{user.username}</strong>!</p>
             <p>Tu rol es: <strong>{user.role}</strong></p>
             <div className="quick-links">
-              <Link href="/products" className="btn-primary">Ver Productos</Link>
-              <Link href="/orders" className="btn-secondary">Mis Pedidos</Link>
+              <Link to="/products" className="btn-primary">Ver Productos</Link>
+              <Link to="/orders" className="btn-secondary">Mis Pedidos</Link>
             </div>
           </div>
         ) : (
           <div className="guest-info">
             <p>Por favor, inicia sesión o regístrate para continuar</p>
             <div className="quick-links">
-              <Link href="/login" className="btn-primary">Iniciar Sesión</Link>
-              <Link href="/register" className="btn-secondary">Registrarse</Link>
+              <Link to="/login" className="btn-primary">Iniciar Sesión</Link>
+              <Link to="/register" className="btn-secondary">Registrarse</Link>
             </div>
           </div>
         )}
